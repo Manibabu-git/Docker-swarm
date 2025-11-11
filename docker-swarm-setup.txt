@@ -1,0 +1,71 @@
+Docker Swarm is Docker’s built-in container orchestration tool — it lets you run, scale, and manage multiple containers across multiple servers (nodes) as one cluster.
+
+Step-1:
+Install docker on all nodes whatever going to use docker-swarm cluster.
+ $ yum install docker -y
+ $ systemctl start docker
+ $ systemctl status docker --->it should be active and running.
+
+ Step-2: create Manage node or swarm leader node
+
+ $ docker swarm init    --->it will generate token which lets you to connect workers.
+
+ ex:  docker swarm join --token SWMTKN-1-xxxxxxxx 192.168.1.10:2377
+
+or 
+ $ docker swarm init --advertise-addr <MANAGER-IP>
+
+Step-3 Login into worker node
+ run the token command 
+ ex:  docker swarm join --token SWMTKN-1-xxxxxxxx 192.168.1.10:2377
+
+ Note: now connection got established.
+
+ How to create container services ::
+ ====================================
+ build images or pull images from the docker hub.
+
+ Vi Dockerfile
+ FROM ubuntu
+ LABEL mainter Manibabu
+ EXPOSE 80
+ RUN apt-get update
+ RUN apt-get install nginx -y
+
+
+ $ docker build -t nginximg .  --> building the NGINXimage using Dockerfile
+ $ docker images
+ 
+ $ docker service create --name ningxService --publish 80:80
+ or
+ $ docker service create --replicas 3 --name nginxservice --publish 80:80
+
+ $ docker serive ls  -->you wii get the docker serivice which is running on the worker node.
+
+ $ try to access the container service application on the chrome browser.
+
+ How to create mutliple services using docker-compose:
+ ====================================================
+ vi docker-compose.yml
+
+ version: "3.2"
+   services:
+      nginx:
+       image: docker.io/nginx:latest
+       ports:
+        - "80:80"
+       deploy:
+         replicas: 3
+      apache2:
+        image: docker.io/apache2
+        ports:
+	 - "8080"80"
+	deploy:
+	  replocas: 2
+
+
+$ docker stack deploy -c docker-compose.yml mystack
+$ docker service ls
+$ docker service rm <service name>
+$ docker rm <stack-name>
+
