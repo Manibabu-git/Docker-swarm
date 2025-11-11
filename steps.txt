@@ -1,0 +1,44 @@
+Step-1:
+Create 1 instances for 1 manage node and 1 for worker node
+
+Step-2: install docker on both machines
+$ yum install docker -y
+$ systemctl start docker 
+$ systemctl status docker
+$ chmod 777 /var/run/docker.sock  # # --> provide permissions for docker 
+
+Step-4 : Create Dockerfile
+$ vim Dockerfile
+
+Step-3: create index.html file 
+vim index.html
+
+Step-4: Install jenkins.
+
+$ sudo yum update -y
+
+$ sudo yum install java-17-amazon-corretto -y
+
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo \
+  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+$ sudo yum install jenkins -y
+
+$ sudo systemctl enable jenkins
+
+$ sudo systemctl start jenkins
+
+Step-5: login into jenkins and create job for build images.
+
+$ docker build -t imagename <path of the Dockerfile>
+
+//see the pipeline create on the jenkins and uploaded in the github
+
+Step-6:
+deploy the docker service using the docker compose file by creating stack
+
+$ docker stack deploy -c docker-compose.yml mystack
+
+//see the details in github too for reference
