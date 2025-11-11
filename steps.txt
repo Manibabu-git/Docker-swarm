@@ -38,6 +38,10 @@ $ docker build -t imagename <path of the Dockerfile>
 
 Step-6:
 deploy the docker service using the docker compose file by creating stack
+step-7:
+$ docker service ls
+$ docker rm stack
+
 
 $ docker stack deploy -c docker-compose.yml mystack
 
